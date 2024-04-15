@@ -51,6 +51,11 @@ class ConvertNumberToRomanNumeralsTest extends TestCase
         $this->assertEquals($this->action->calculateRomanNumeralEquivalent(1001), 'I_I');
     }
 
+    public function test_that_roman_numerals_of_3000(): void
+    {
+        $this->assertEquals($this->action->calculateRomanNumeralEquivalent(3000), 'III_');
+    }
+
     public function test_that_roman_numerals_of_99999(): void
     {
         $this->assertEquals($this->action->calculateRomanNumeralEquivalent(99999), 'XCIX_CMXCIX');
