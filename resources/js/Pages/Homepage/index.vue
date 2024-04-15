@@ -56,7 +56,7 @@ export default {
 
                 if (!this.no_m_mode) {
                     // If 'No M Mode' is off, convert all instances of I with M and ignore them during barring process
-                    let to_be_barred_replaced = to_be_barred.replace("I", "M");
+                    let to_be_barred_replaced = to_be_barred.replaceAll("I", "M");
 
                     for (let i = 0; i < to_be_barred_replaced.length; i++) {
                         if (to_be_barred_replaced[i] !== "M") {
@@ -66,8 +66,10 @@ export default {
                         }
                     }
                 } else {
-                    // If 'No M Mode' is on, just bar in its entirety
-                    barred_replaced = '<span style="text-decoration: overline;">' + to_be_barred + "</span>";
+                    // If 'No M Mode' is on, convert Ms to Is and bar in its entirety
+                    let to_be_barred_replaced = to_be_barred.replaceAll("M", "I");
+
+                    barred_replaced = '<span style="text-decoration: overline;">' + to_be_barred_replaced + "</span>";
                 }
 
                 this.answer = barred_replaced + value.slice(th_sign_i + 1);
