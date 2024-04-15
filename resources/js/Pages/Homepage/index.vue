@@ -1,21 +1,28 @@
 <template>
-    <form @submit.prevent="submitNumber">
-        <div class="error_message" v-if="validation_errors.length > 0">
+    <form @submit.prevent="submitNumber" class="m-4">
+        <!-- VALIDATION ERRORS -->
+        <div class="flex flex-col mb-4 text-red-500 text-sm items-center justify-center" v-if="validation_errors.length > 0">
             <div>Whoops! Something went wrong</div>
             <div v-for="(error, i) in validation_errors" :key="i">
                 <li v-for="(issue, j) in error.values" :key="j">
-                    <span class="error_list">{{ issue }}</span>
+                    <span class="list-inside">{{ issue }}</span>
                 </li>
             </div>
         </div>
-        <label>Please enter an integer between 1-100000:</label>
-        <input v-model="number" type="text" placeholder="Enter an integer" />
-        <button>Convert</button>
-        <div>
-            <input type="checkbox" id="no_m_mode" v-model="no_m_mode" />
-            <label><strong>Do not</strong> include 'M' for values greater than 1000 <a href="https://mammothmemory.net/maths/numbers/roman-numerals/roman-numerals-from-1000-to-1-million.html" target="_blank">(Refer to this link)</a></label>
+
+        <!-- MAIN INPUT FORM -->
+        <div class="flex flex-col justify-center items-center text-center mx-auto gap-4">
+            <div class="flex flex-col space-y-2">
+                <label class="font-bold">Please enter an integer between 1-100000:</label>
+                <input class="text-sm w-32 mx-auto border-pink-500 px-2 py-1 bg-gray-50 block shadow-sm border-gray-50 rounded-md" v-model="number" type="text" placeholder="Enter an integer" />
+            </div>
+            <div class="flex flex-row space-x-1">
+                <input type="checkbox" id="no_m_mode" v-model="no_m_mode" />
+                <label>Replace 'M' with '<span class="overline">I</span>' for values greater than 1000 <a class="underline text-blue-500" href="https://mammothmemory.net/maths/numbers/roman-numerals/roman-numerals-from-1000-to-1-million.html" target="_blank">(Refer to this link)</a></label>
+            </div>
+            <button class="px-2 py-1 bg-yellow-500 hover:bg-yellow-600 rounded-md text-white">Convert to Roman Numerals</button>
+            <div v-if="answer"><strong>Answer:</strong> <span v-html="answer"></span></div>
         </div>
-        <div v-if="answer"><strong>Answer:</strong> <span v-html="answer"></span></div>
     </form>
 </template>
 <script>
@@ -81,22 +88,5 @@ export default {
 };
 </script>
 
-<style scoped>
-.form_class {
-  display: flex; 
-margin-top: 0.5rem; 
-flex-direction: column; 
-}
-.error_message {
-    display: flex;
-    margin-bottom: 1rem;
-    flex-direction: column;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    color: #ef4444;
-}
-
-.error_list {
-    list-style-position: inside;
-}
+<style>
 </style>
