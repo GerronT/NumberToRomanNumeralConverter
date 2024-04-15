@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/convert-number-to-roman-numerals', \App\Actions\ConvertNumberToRomanNumerals::class);
+Route::post('/convert-roman-numerals-to-number', \App\Actions\ConvertRomanNumeralsToNumber::class);

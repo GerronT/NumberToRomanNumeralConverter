@@ -1,29 +1,59 @@
 <template>
-    <form @submit.prevent="submitNumber" class="m-4">
-        <!-- VALIDATION ERRORS -->
-        <div class="flex flex-col mb-4 text-red-500 text-sm items-center justify-center" v-if="validation_errors.length > 0">
-            <div>Whoops! Something went wrong</div>
-            <div v-for="(error, i) in validation_errors" :key="i">
-                <li v-for="(issue, j) in error.values" :key="j">
-                    <span class="list-inside">{{ issue }}</span>
-                </li>
+    <div>
+        <form @submit.prevent="submitNumber" class="m-4">
+            <!-- VALIDATION ERRORS -->
+            <div class="flex flex-col mb-4 text-red-500 text-sm items-center justify-center" v-if="validation_errors.length > 0">
+                <div>Whoops! Something went wrong</div>
+                <div v-for="(error, i) in validation_errors" :key="i">
+                    <li v-for="(issue, j) in error.values" :key="j">
+                        <span class="list-inside">{{ issue }}</span>
+                    </li>
+                </div>
             </div>
-        </div>
 
-        <!-- MAIN INPUT FORM -->
-        <div class="flex flex-col justify-center items-center text-center mx-auto gap-4">
-            <div class="flex flex-col space-y-2">
-                <label class="font-bold">Please enter an integer between 1-100000:</label>
-                <input class="text-sm w-32 mx-auto border-pink-500 px-2 py-1 bg-gray-50 block shadow-sm border-gray-50 rounded-md" v-model="number" type="text" placeholder="Enter an integer" />
+            <!-- MAIN INPUT FORM -->
+            <div class="flex flex-col justify-center items-center text-center mx-auto gap-4">
+                <div class="flex flex-col space-y-2">
+                    <label class="font-bold">Please enter an integer between 1-100000:</label>
+                    <input class="text-sm w-32 mx-auto border-pink-500 px-2 py-1 bg-gray-50 block shadow-sm border-gray-50 rounded-md" v-model="number" type="text" placeholder="Enter an integer" />
+                </div>
+                <div class="flex flex-row space-x-1">
+                    <input type="checkbox" id="no_m_mode" v-model="no_m_mode" />
+                    <label>Replace 'M' with '<span class="overline">I</span>' for values greater than 1000 <a class="underline text-blue-500" href="https://mammothmemory.net/maths/numbers/roman-numerals/roman-numerals-from-1000-to-1-million.html" target="_blank">(Refer to this link)</a></label>
+                </div>
+                <button class="px-2 py-1 bg-yellow-500 hover:bg-yellow-600 rounded-md text-white">Convert to Roman Numerals</button>
+                <div v-if="answer"><strong>Answer:</strong> <span v-html="answer"></span></div>
             </div>
-            <div class="flex flex-row space-x-1">
-                <input type="checkbox" id="no_m_mode" v-model="no_m_mode" />
-                <label>Replace 'M' with '<span class="overline">I</span>' for values greater than 1000 <a class="underline text-blue-500" href="https://mammothmemory.net/maths/numbers/roman-numerals/roman-numerals-from-1000-to-1-million.html" target="_blank">(Refer to this link)</a></label>
+        </form>
+
+        <div class="border border-t-2 border-gray-200"></div>
+
+        <form @submit.prevent="submitRomanNumeral" class="m-4">
+            <!-- VALIDATION ERRORS -->
+            <div class="flex flex-col mb-4 text-red-500 text-sm items-center justify-center" v-if="validation_errors_2.length > 0">
+                <div>Whoops! Something went wrong</div>
+                <div v-for="(error, i) in validation_errors_2" :key="i">
+                    <li v-for="(issue, j) in error.values" :key="j">
+                        <span class="list-inside">{{ issue }}</span>
+                    </li>
+                </div>
             </div>
-            <button class="px-2 py-1 bg-yellow-500 hover:bg-yellow-600 rounded-md text-white">Convert to Roman Numerals</button>
-            <div v-if="answer"><strong>Answer:</strong> <span v-html="answer"></span></div>
-        </div>
-    </form>
+
+            <!-- MAIN INPUT FORM -->
+            <div class="flex flex-col justify-center items-center text-center mx-auto gap-4">
+                <div class="flex flex-col space-y-2">
+                    <label class="font-bold">Please enter a roman numeral:</label>
+                    <ul class="text-sm text-gray-400 list-disc">
+                        <li class="list-inside">Use '_' to bar all characters on the left. eg. XCIX_CMXCIX would be equivalent to <span class="overline">XCIX</span>CMXCIX</li>
+                        <li class="list-inside">'M' is exempted from being barred. eg. XCMX_CMXCIX would be equivalent to <span class="overline">XC</span>M<span class="overline">X</span>CMXCIX, also known as <span class="overline">XCIX</span>CMXCIX</li>
+                    </ul>
+                    <input class="text-sm w-40 mx-auto border-pink-500 px-2 py-1 bg-gray-50 block shadow-sm border-gray-50 rounded-md" v-model="roman_numerals" type="text" placeholder="Enter a roman numeral" />
+                </div>
+                <button class="px-2 py-1 bg-yellow-500 hover:bg-yellow-600 rounded-md text-white">Convert to Number</button>
+                <div v-if="answer_2"><strong>Answer:</strong> <span v-html="answer_2"></span></div>
+            </div>
+        </form>
+    </div>
 </template>
 <script>
 import axios from "axios";
@@ -34,6 +64,10 @@ export default {
             validation_errors: [],
             answer: null,
             no_m_mode: false,
+
+            roman_numerals: null,
+            validation_errors_2: [],
+            answer_2: null,
         };
     },
     methods: {
@@ -83,6 +117,22 @@ export default {
             } else {
                 this.answer = value;
             }
+        },
+
+        submitRomanNumeral() {
+            this.validation_errors_2 = [];
+            axios
+                .post("/api/convert-roman-numerals-to-number", { roman_numerals: this.roman_numerals })
+                .then((res) => {
+                    this.answer_2 = res.data;
+                })
+                .catch((error) => {
+                    if (error?.response?.data?.errors) {
+                        for (const [key, value] of Object.entries(error.response.data.errors)) {
+                            this.validation_errors_2.push({ key: key, values: value });
+                        }
+                    }
+                });
         },
     },
 };

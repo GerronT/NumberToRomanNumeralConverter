@@ -5,26 +5,11 @@ namespace App\Actions;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Config;
 
 class ConvertNumberToRomanNumerals
 {
     use AsAction;
-
-    private $MAP = [
-        1000 => 'M',
-        900 => 'CM',
-        500 => 'D',
-        400 => 'CD',
-        100 => 'C',
-        90 => 'XC',
-        50 => 'L',
-        40 => 'XL',
-        10 => 'X',
-        9 => 'IX',
-        5 => 'V',
-        4 => 'IV',
-        1 => 'I'
-    ];
 
     public function handle(Request $request)
     {
@@ -54,7 +39,7 @@ class ConvertNumberToRomanNumerals
 
     protected function convertRecursively($number)
     {
-        foreach ($this->MAP as $value => $equiv) {
+        foreach (Config::get('constants.NUMBER_RR_MAP') as $value => $equiv) {
             if ($number >= $value) {
                 return $equiv  . $this->convertRecursively($number - $value);
             }

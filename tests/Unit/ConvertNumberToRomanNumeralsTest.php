@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use App\Actions\ConvertNumberToRomanNumerals;
 
 class ConvertNumberToRomanNumeralsTest extends TestCase
@@ -16,52 +16,52 @@ class ConvertNumberToRomanNumeralsTest extends TestCase
         $this->action = new ConvertNumberToRomanNumerals();
     }
 
-    public function test_that_roman_numerals_of_1(): void
+    public function test_the_roman_numerals_of_1(): void
     {
         $this->assertEquals($this->action->calculateRomanNumeralEquivalent(1), 'I');
     }
 
-    public function test_that_roman_numerals_of_10(): void
+    public function test_the_roman_numerals_of_10(): void
     {
         $this->assertEquals($this->action->calculateRomanNumeralEquivalent(10), 'X');
     }
 
-    public function test_that_roman_numerals_of_50(): void
+    public function test_the_roman_numerals_of_50(): void
     {
         $this->assertEquals($this->action->calculateRomanNumeralEquivalent(50), 'L');
     }
 
-    public function test_that_roman_numerals_of_400(): void
+    public function test_the_roman_numerals_of_400(): void
     {
         $this->assertEquals($this->action->calculateRomanNumeralEquivalent(400), 'CD');
     }
 
-    public function test_that_roman_numerals_of_900(): void
+    public function test_the_roman_numerals_of_900(): void
     {
         $this->assertEquals($this->action->calculateRomanNumeralEquivalent(900), 'CM');
     }
 
-    public function test_that_roman_numerals_of_1000(): void
+    public function test_the_roman_numerals_of_1000(): void
     {
         $this->assertEquals($this->action->calculateRomanNumeralEquivalent(1000), 'M');
     }
 
-    public function test_that_roman_numerals_of_1001(): void
+    public function test_the_roman_numerals_of_1001(): void
     {
         $this->assertEquals($this->action->calculateRomanNumeralEquivalent(1001), 'I_I');
     }
 
-    public function test_that_roman_numerals_of_3000(): void
+    public function test_the_roman_numerals_of_3000(): void
     {
         $this->assertEquals($this->action->calculateRomanNumeralEquivalent(3000), 'III_');
     }
 
-    public function test_that_roman_numerals_of_99999(): void
+    public function test_the_roman_numerals_of_99999(): void
     {
         $this->assertEquals($this->action->calculateRomanNumeralEquivalent(99999), 'XCIX_CMXCIX');
     }
 
-    public function test_that_roman_numerals_of_100000(): void
+    public function test_the_roman_numerals_of_100000(): void
     {
         $this->assertEquals($this->action->calculateRomanNumeralEquivalent(100000), 'C_');
     }
